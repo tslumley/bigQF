@@ -1,0 +1,13 @@
+useDynLib("bigQF")
+import(Matrix)
+import(methods)
+importFrom(svd, trlan.eigen, trlan.svd, extmat)
+importFrom(CompQuadForm, davies)
+importFrom(stats, pchisq,qchisq)
+
+export(ssvd, seigen, pQF,  SKAT.matrixfree, sparse.matrixfree)
+
+S3method(print,matrixfree)
+S3method(dim,matrixfree)
+
+

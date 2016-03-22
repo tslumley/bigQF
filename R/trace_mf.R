@@ -1,0 +1,13 @@
+trace_mf <-
+function(Mmult,tMmult,k,cols,trace.full=NULL){
+    Omega<-matrix(rnorm(k*cols), ncol=k)
+	AOmega<-Mmult(Omega)
+	AAOmega<-tMmult(AOmega)
+	if (!is.null(trace.full))
+		tr<-sum(rowSums(AOmega*AOmega))/k
+	trsquared<-sum(rowSums(AAOmega*AAOmega))/k
+	if (is.null(trace.full))
+		trsquared
+	else
+		trsquared*(trace.full/tr)^2 
+}
