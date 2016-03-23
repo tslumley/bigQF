@@ -48,19 +48,18 @@ sparse.matrixfree<-function(M){
 
 SKAT.matrixfree<-function(G,weights=function(maf) dbeta(maf,1,25)){
   center<-colMeans(G)
-  scale<-apply(G,2,sd)
   ww<-weights(center/2)
-  spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww/scale)
-  cntr<-ww*center/scale
+  spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
+  cntr<-colMeans(spG)
 
   rval<-list(
     mult=function(X){
-	 (t(t(spG%*%X)-colSums(cntr*as.matrix(X))))
+	 t(t(spG%*%X)-colSums(cntr*as.matrix(X)))
 	},
 	
     tmult=function(X){
 	crossprod(spG,X)- outer(cntr,colSums(as.matrix(X)))
-	},	
+	}	,	
     trace=sum(spG^2)-sum(cntr^2)*nrow(G),
     ncol=ncol(G),
     nrow=nrow(G)
