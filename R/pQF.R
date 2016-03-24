@@ -82,6 +82,13 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
         list(scale = tr * tr2, df = length(a)/tr2)
     }
     method <- match.arg(method)
+    
+    ## can happen with randomised trace estimator if most singular values are very small.
+    bad.df<-df<0
+    df[bad.df]<-1
+    a[bad.df]<-0
+    ##
+    
     sat <- satterthwaite(a, df)
     guess <- pchisq(x/sat$scale, sat$df, lower.tail = lower.tail)
     if (method == "satterthwaite") 
