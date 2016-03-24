@@ -42,7 +42,8 @@ Thomas Lumley
 \examples{
 data(sequence)
 skat<-SKAT.matrixfree(sequence)
-pQF(c(1e10,1.2e10), skat,n=100)
+skat$trace
+pQF(c(67564941,7e7,1e8), skat,n=100)
   
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

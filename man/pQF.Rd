@@ -9,7 +9,7 @@ Computes the upper tail probability for quadratic forms in standard Normal varia
 }
 \usage{
 pQF(x, M, method = c("ssvd", "lanczos", "satterthwaite"), neig = 100,
-  tr2.sample.size = 300, q = NULL,
+  tr2.sample.size = 500, q = NULL,
   convolution.method = c("saddlepoint", "integration"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -57,17 +57,21 @@ data(sequence)
 dim(sequence)
 
 skat<-SKAT.matrixfree(sequence)
-pQF(c(1e10,1.2e10),skat, n=100)
+skat$trace
+pQF(c(67564941,7e7,1e8),skat, n=100)
 
 \dontrun{
 # these take a few minutes
-scG<-scale(sequence)
+G<-sequence
 wuweights<-function(maf) dbeta(maf,1,25)
-tildeGt<-t(wuweights(attr(scG,"scaled:center")/2)*t(scG))
-pQF(c(1e10,1.2e10),tildeGt, n=100)
+tmp<-wuweights(colMeans(G)/2)*t(G)
+tildeGt<-t(tmp-rowMeans(tmp))
+sum(tildeGt^2)
+
+pQF(c(67564941,7e7,1e8), tildeGt, n=100)
 
 H<-crossprod(tildeGt)
-pQF(c(1e10,1.2e10), H, n=100)
+pQF(c(67564941,7e7,1e8), H, n=100)
 }
 
 

@@ -1,7 +1,7 @@
 
 is.square<-function(M) nrow(M)==ncol(M)
 
-pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=300, q=NULL,  convolution.method=c("saddlepoint","integration")){
+pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=500, q=NULL,  convolution.method=c("saddlepoint","integration")){
    method<-match.arg(method)
    conv.method<-match.arg(convolution.method)
 
