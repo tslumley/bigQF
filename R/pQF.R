@@ -46,7 +46,7 @@ sparse.matrixfree<-function(M){
 
 
 
-SKAT.matrixfree<-function(G,weights=function(maf) dbeta(maf,1,25)){
+SKAT.matrixfree.default<-function(G,weights=function(maf) dbeta(maf,1,25),model=NULL){
   center<-colMeans(G)
   ww<-weights(center/2)
   spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
@@ -54,18 +54,55 @@ SKAT.matrixfree<-function(G,weights=function(maf) dbeta(maf,1,25)){
 
   rval<-list(
     mult=function(X){
-	 t(t(spG%*%X)-colSums(cntr*as.matrix(X)))
+	 t(t(spG%*%X)-colSums(cntr*as.matrix(X)))/sqrt(2)
 	},
 	
     tmult=function(X){
-	crossprod(spG,X)- outer(cntr,colSums(as.matrix(X)))
+	(crossprod(spG,X)- outer(cntr,colSums(as.matrix(X))))/sqrt(2)
 	}	,	
-    trace=sum(spG^2)-sum(cntr^2)*nrow(G),
+    trace=(sum(spG^2)-sum(cntr^2)*nrow(G))/2,
     ncol=ncol(G),
     nrow=nrow(G)
   )
  class(rval)<-"matrixfree"
  rval
+}
+
+SKAT.matrixfree<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
+  UseMethod("SKAT.matrixfree", model)
+}
+
+SKAT.matrixfree.lm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
+  center<-colMeans(G)
+  ww<-weights(center/2)
+  spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
+  qr<-model$qr
+
+
+rval<-list(
+     mult=function(X){
+	base::qr.resid(qr, as.matrix(spG%*%X))/sqrt(2)
+     },
+     tmult=function(X){
+         crossprod(spG,qr.resid(qr,X))/sqrt(2)
+      },   
+    trace=NULL,
+    ncol=ncol(G),
+    nrow=nrow(G)
+  )
+  class(rval)<-"matrixfree"
+  rval
+}
+
+SKAT.matrixfree.glm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
+ if (family(model)$family=="gaussian"){
+    ## really lm
+    NextMethod()
+    } else {
+ ## really glm
+
+
+  }
 }
 
 
@@ -83,10 +120,13 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
     }
     method <- match.arg(method)
     
-    ## can happen with randomised trace estimator if most singular values are very small.
-    bad.df<-df<0
-    df[bad.df]<-1
-    a[bad.df]<-0
+    ## can happen with randomised trace estimator if most remaining singular values are very small.
+    ##
+    if (any(bad.df <- (df<=0))){
+      warning("Negative df removed")
+      df[bad.df]<-1
+      a[bad.df]<-0
+    }  
     ##
     
     sat <- satterthwaite(a, df)
@@ -107,12 +147,11 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
                 if (f$ifault > 0) 
                   warning("Probable loss of accuracy ")
                 guess[i] <- f$Qq
-            }
-        }
+            }   
         if (lower.tail) 
             guess <- 1 - guess
         return(guess)
-    
+    }
     if (method == "saddlepoint") {
         for (i in seq(length = length(x))) {
             lambda <- rep(a, df)
