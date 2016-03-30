@@ -8,7 +8,9 @@ pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sa
 ## sparse matrix
    if (inherits(M, "matrixfree")){
      if (is.null(q)) q<- 3
-     switch(method, ssvd=pchisqsum_smf(x,M$mult, M$tmult, M$ncol, M$trace, n=neig, q=q, tr2.sample.size=tr2.sample.size, method=conv.method), lanczos= pchisqsum_smf(x,M$mult, M$tmult, M$ncol,M$nrow, M$trace, n=neig,  tr2.sample.size=tr2.sample.size, method=conv.method), satterthwaite= pchisqsum_spsatt(x,M$mult, M$tmult, M$ncol, M$trace,tr2.sample.size=tr2.sample.size))
+     switch(method, ssvd=pchisqsum_smf(x,M$mult, M$tmult, M$ncol, M$trace, n=neig, q=q, tr2.sample.size=tr2.sample.size, method=conv.method),
+     lanczos= pchisqsum_lmf(x,M$mult, M$tmult, M$ncol,M$nrow, M$trace, n=neig,  tr2.sample.size=tr2.sample.size, method=conv.method),
+     satterthwaite= pchisqsum_spsatt(x,M$mult, M$tmult, M$ncol, M$trace,tr2.sample.size=tr2.sample.size))
 
    } else { ## square matrix H=G^TG
    if (is.square(M)){
