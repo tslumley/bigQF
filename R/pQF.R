@@ -5,6 +5,12 @@ pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sa
    method<-match.arg(method)
    conv.method<-match.arg(convolution.method)
 
+## sanity check
+   if(method != "satterthwaite"){
+     mindim<-min(dim(M))
+     if (mindim < neig) stop("Can't have more eigenvalues than min(nrow,ncol)")
+   }
+  
 ## sparse matrix
    if (inherits(M, "matrixfree")){
      if (is.null(q)) q<- 3
@@ -124,13 +130,15 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
     
     ## can happen with randomised trace estimator if most remaining singular values are very small.
     ##
-    if (any(bad.df <- (df<=0))){
-      warning("Negative df removed")
+    if (any(bad.df <- (df<1))){
+      warning("Negative/fractional df removed")
       df[bad.df]<-1
       a[bad.df]<-0
-    }  
+    }
+    df<-round(df)
     ##
-    
+   
+   
     sat <- satterthwaite(a, df)
     guess <- pchisq(x/sat$scale, sat$df, lower.tail = lower.tail)
     if (method == "satterthwaite") 
