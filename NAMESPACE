@@ -9,5 +9,6 @@ export(ssvd, seigen, pQF,  SKAT.matrixfree, sparse.matrixfree)
 
 S3method(print,matrixfree)
 S3method(dim,matrixfree)
-
+S3method(SKAT.matrixfree,default)
+S3method(SKAT.matrixfree,lm)
 

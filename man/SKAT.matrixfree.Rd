@@ -8,7 +8,7 @@ Make 'matrix-free' object for SKAT test
 'Matrix-free' or 'implicit' linear algebra uses a matrix only through the linear operations of multiplying by the matrix or its transpose. It's suitable for sparse matrices, and also for structured matrices that are not sparse but still have fast algorithms for multiplication.  The Sequence Kernel Association Test is typically performed on sparse genotype data, but the matrix involved in computations has been centered and is no longer sparse. 
 }
 \usage{
-SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25))
+SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,12 +18,19 @@ A 0/1/2 matrix whose rows are markers and whose columns are samples. Should be m
   \item{weights}{
 A weight function used in SKAT: the default is the standard one.
 }
+\item{model}{
+A generalised linear model used for adjustment, or \code{NULL}
+}
 }
 
 \value{
 An object of class \code{matrixfree}
+}
+\details{
+If the adjustment model is \code{NULL} the object contains the trace of the underlying quadratic form, if the adjustment model is not null the trace will be estimated using Hutchinson's randomised estimator inside \code{\link{pQF}}
 
 }
+
 \references{
 Lee, S., with contributions from Larisa Miropolsky, and Wu, M. (2015). SKAT: SNP-Set (Sequence) Kernel Association Test. R package version 1.1.2.
 
@@ -43,7 +50,7 @@ Thomas Lumley
 data(sequence)
 skat<-SKAT.matrixfree(sequence)
 skat$trace
-pQF(c(67564941,7e7,1e8), skat,n=100)
+pQF(c(33782471,7e7,1e8), skat,n=100, tr2.sample.size=500)
   
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

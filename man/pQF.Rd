@@ -26,9 +26,9 @@ If \code{M} is square, it is the matrix in the quadratic form and is assumed to 
 Number of leading eigenvalues to use
 }
   \item{tr2.sample.size}{
-When \code{M} is not square, a randomised estimator for the trace of $crossprod(M)^2$ is used. This is the sample size.}
+When \code{M} is not square, a randomised estimator for the trace of \code{crossprod(M)^2} is used. This is the sample size. When \code{M} is of \code{"matrixfree"} and does not include the trace of {crossprod(M)} as a component, this sample size will also be used to compute that. See Hutchinson reference. }
   \item{q}{
-Power iteration parameter for the stochastic SVD (see the Tropp et al reference)
+Power iteration parameter for the stochastic SVD (see the Halko et al reference)
 }
   \item{convolution.method}{
 For either the "ssvd" or "lanczos" methods, how the convolution of the leading-eigenvalue terms is performed: by Kuonen's saddlepoint approximation or Davies' algorithm inverting the characteristic function
@@ -44,6 +44,8 @@ Vector of upper tail probabilities
 Lumley et al. "Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms"
 
 Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{http://arxiv.org/abs/0909.4061}.
+
+Hutchinson, M. F. (1990). A stochastic estimator of the trace of the influence matrix for Laplacian smoothing splines. Communications in Statistics - Simulation and Computation, 19(2):433-450.
 }
 \author{
 Thomas Lumley
@@ -58,20 +60,20 @@ dim(sequence)
 
 skat<-SKAT.matrixfree(sequence)
 skat$trace
-pQF(c(67564941,7e7,1e8),skat, n=100)
+pQF(c(33782471,7e7,1e8),skat, n=100)
 
 \dontrun{
 # these take a few minutes
 G<-sequence
 wuweights<-function(maf) dbeta(maf,1,25)
 tmp<-wuweights(colMeans(G)/2)*t(G)
-tildeGt<-t(tmp-rowMeans(tmp))
+tildeGt<-t(tmp-rowMeans(tmp))/sqrt(2)
 sum(tildeGt^2)
 
-pQF(c(67564941,7e7,1e8), tildeGt, n=100)
+pQF(c(33782471,7e7,1e8), tildeGt, n=100)
 
 H<-crossprod(tildeGt)
-pQF(c(67564941,7e7,1e8), H, n=100)
+pQF(c(33782471,7e7,1e8), H, n=100)
 }
 
 

@@ -7,7 +7,7 @@ function(Mmult,tMmult,k,cols,trace.full=NULL){
 		tr<-sum(rowSums(AOmega*AOmega))/k
 	trsquared<-sum(rowSums(AAOmega*AAOmega))/k
 	if (is.null(trace.full))
-		trsquared
+		c(tr2=trsquared, tr=tr)
 	else
-		trsquared*(trace.full/tr)^2 
+		c(tr2=trsquared*(trace.full/tr)^2, tr=trace.full)
 }
