@@ -19,7 +19,7 @@ A 0/1/2 matrix whose rows are markers and whose columns are samples. Should be m
 A weight function used in SKAT: the default is the standard one.
 }
 \item{model}{
-A generalised linear model used for adjustment, or \code{NULL}
+A  linear model or generalised linear model object used for adjustment, or \code{NULL}
 }
 }
 
@@ -27,7 +27,7 @@ A generalised linear model used for adjustment, or \code{NULL}
 An object of class \code{matrixfree}
 }
 \details{
-If the adjustment model is \code{NULL} the object contains the trace of the underlying quadratic form, if the adjustment model is not null the trace will be estimated using Hutchinson's randomised estimator inside \code{\link{pQF}}
+If the adjustment model is \code{NULL} the object contains the trace of the underlying quadratic form, if the adjustment model is not \code{NULL} the trace will be estimated using Hutchinson's randomised estimator inside \code{\link{pQF}}
 
 }
 

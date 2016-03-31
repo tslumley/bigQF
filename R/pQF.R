@@ -103,15 +103,29 @@ rval<-list(
 }
 
 SKAT.matrixfree.glm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
- if (family(model)$family=="gaussian"){
-    ## really lm
-    NextMethod()
-    } else {
- ## really glm
+  center<-colMeans(G)
+  ww<-weights(center/2)
+  fw <- model$family$variance(fitted(model))
+  spG<-Diagonal(x=fw)%*%Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
+  qr<-model$qr
 
-
-  }
+rval<-list(
+     mult=function(X){
+	base::qr.resid(qr, as.matrix(spG%*%X))/sqrt(2)
+     },
+     tmult=function(X){
+         crossprod(spG,qr.resid(qr,X))/sqrt(2)
+      },   
+    trace=NULL,
+    ncol=ncol(G),
+    nrow=nrow(G)
+  )
+  class(rval)<-"matrixfree"
+  rval
 }
+
+
+
 
 
 
