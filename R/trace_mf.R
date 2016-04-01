@@ -4,9 +4,7 @@ function(Mmult,tMmult,k,cols,trace.full=NULL){
 	AOmega<-Mmult(Omega)
 	AAOmega<-tMmult(AOmega)
 	
-	if (is.null(trace.full))
-		tr<-sum(rowSums(AOmega*AOmega))/k
-
+	tr<-sum(rowSums(AOmega*AOmega))/k
 	trsquared<-sum(rowSums(AAOmega*AAOmega))/k
 	
 	if (is.null(trace.full))
