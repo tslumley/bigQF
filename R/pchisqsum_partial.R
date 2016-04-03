@@ -12,5 +12,8 @@ function(x,M,n=100,method=c("saddlepoint","integration"),tol=1e-3){
 	tr2.small<-tr2-sum(ee$d^2)
 	scale<-tr2.small/tr.small
 	nu<-(tr.small^2)/tr2.small
-    pchisqsum(x, c(rep(1,n),ceiling(nu)), c(ee$d, scale), method=method,lower.tail=FALSE)
+	if (n>0)
+	    pchisqsum(x, c(rep(1,n),ceiling(nu)), c(ee$d, scale), method=method,lower.tail=FALSE)
+	else
+	    pchisq(x/scale, nu,lower.tail=FALSE)
 }

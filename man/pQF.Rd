@@ -35,7 +35,13 @@ For either the "ssvd" or "lanczos" methods, how the convolution of the leading-e
 }
 }
 \details{
-Increasing \code{neig} or \code{q} will improve the accuracy of approximation. In simulated human sequence data, \code{neig=100} is satisfactory for 5000 samples and markers. Increasing \code{q} will help when the singular values of \code{M} decrease slowly.  The default sample size for the randomized trace estimator seems to be large enough.
+Increasing \code{neig} or \code{q} will improve the accuracy of approximation. In simulated human sequence data, \code{neig=100} is satisfactory for 5000 samples and markers. Increasing \code{q} should help when the singular values of \code{M} decrease slowly.  The default sample size for the randomized trace estimator seems to be large enough.
+
+If the remainder term in the approximation has less than 1 degree of freedom it will be dropped, with a warning. The approximation will then be anticonservative, but usually not seriously so. 
+
+In earlier versions, \code{method="satterthwaite"} rounded the number of degrees of freedom up to the next integer; it now does not round.
+
+
 }
 \value{
 Vector of upper tail probabilities
