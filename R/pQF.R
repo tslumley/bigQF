@@ -105,7 +105,7 @@ rval<-list(
 SKAT.matrixfree.glm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
   center<-colMeans(G)
   ww<-weights(center/2)
-  fw <- model$family$variance(fitted(model))
+  fw <-sqrt( model$family$variance(fitted(model)))
   spG<-Diagonal(x=fw)%*%Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
   qr<-model$qr
 
