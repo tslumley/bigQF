@@ -13,7 +13,7 @@ SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{G}{
-A 0/1/2 matrix whose rows are markers and whose columns are samples. Should be mostly zero.
+A 0/1/2 matrix whose columns are markers and whose rows are samples. Should be mostly zero.
 }
   \item{weights}{
 A weight function used in SKAT: the default is the standard one.
