@@ -5,7 +5,7 @@ importFrom(svd, trlan.eigen, trlan.svd, extmat)
 importFrom(CompQuadForm, davies)
 importFrom(stats, pchisq,qchisq)
 
-export(ssvd, seigen, pQF,  SKAT.matrixfree, sparse.matrixfree)
+export(ssvd, seigen, pQF,  SKAT.matrixfree, sparse.matrixfree, famSKAT)
 
 S3method(print,matrixfree)
 S3method(dim,matrixfree)
