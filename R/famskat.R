@@ -23,7 +23,7 @@ famSKAT<-function(G,  formula, kinship, data=NULL, weights = function(maf) dbeta
     		base::qr.resid(qr,as.matrix(solve(CholSigma,(spG %*% X))))
     }, tmult = function(X) {
         crossprod(spG, solve(t(CholSigma), base::qr.resid(qr,X)))
-    }, trace = NULL, ncol = ncol(G), nrow = nrow(G), debugging=list(Pi0=Pi0,tildeG=tildeG,H=H))
+    }, trace = NULL, ncol = ncol(G), nrow = nrow(G))
     class(rval) <- "matrixfree"
     rval
 }
