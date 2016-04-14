@@ -8,7 +8,7 @@ Implicit matrix for family-based SKAT test
 Like \code{link{SKAT.matrixfree}} but for the family-based test of Chen and colleagues
 }
 \usage{
-famSKAT(G, model, kinship, data = NULL, weights = function(maf) dbeta(maf, 1, 25))
+famSKAT(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,23 +22,18 @@ Object of class \code{lmekin} giving the adjustment model, which must have been 
   \item{kinship}{
 The sparse kinship matrix: the \code{model} will have used \code{2*kinship} in its \code{varlist} argument.
 }
-  \item{data}{
-Data frame for the variables in \code{formula}
-}
   \item{weights}{
 A weight function used in SKAT: the default is the standard one.
 
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 
 \value{
 An object of class \code{matrixfree}
 }
 \references{
-Chen H, Meigs JM, Dupuis J (2013) Sequence Kernel Association Test for Quantitative Traits in Family Samples. Genet Epidemiol. 37(2): 196–204.
+Chen H, Meigs JM, Dupuis J (2013) Sequence Kernel Association Test for Quantitative Traits in Family Samples. Genet Epidemiol. 37(2): 196-204.
 }
 
 \note{

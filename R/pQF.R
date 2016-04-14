@@ -55,7 +55,7 @@ sparse.matrixfree<-function(M){
 
 
 
-SKAT.matrixfree.default<-function(G,weights=function(maf) dbeta(maf,1,25),model=NULL){
+SKAT.matrixfree.default<-function(G,weights=function(maf) dbeta(maf,1,25),model=NULL,...){
   center<-colMeans(G)
   ww<-weights(center/2)
   spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
@@ -77,11 +77,11 @@ SKAT.matrixfree.default<-function(G,weights=function(maf) dbeta(maf,1,25),model=
  rval
 }
 
-SKAT.matrixfree<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
+SKAT.matrixfree<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...){
   UseMethod("SKAT.matrixfree", model)
 }
 
-SKAT.matrixfree.lm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
+SKAT.matrixfree.lm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...){
   center<-colMeans(G)
   ww<-weights(center/2)
   spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
@@ -103,7 +103,7 @@ rval<-list(
   rval
 }
 
-SKAT.matrixfree.glm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL){
+SKAT.matrixfree.glm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...){
   center<-colMeans(G)
   ww<-weights(center/2)
   fw <-sqrt( model$family$variance(fitted(model)))

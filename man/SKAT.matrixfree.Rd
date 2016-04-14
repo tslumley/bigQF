@@ -1,5 +1,8 @@
 \name{SKAT.matrixfree}
 \alias{SKAT.matrixfree}
+\alias{SKAT.matrixfree.lm}
+\alias{SKAT.matrixfree.glm}
+\alias{SKAT.matrixfree.lmekin}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Make 'matrix-free' object for SKAT test
@@ -8,10 +11,10 @@ Make 'matrix-free' object for SKAT test
 'Matrix-free' or 'implicit' linear algebra uses a matrix only through the linear operations of multiplying by the matrix or its transpose. It's suitable for sparse matrices, and also for structured matrices that are not sparse but still have fast algorithms for multiplication.  The Sequence Kernel Association Test is typically performed on sparse genotype data, but the matrix involved in computations has been centered and is no longer sparse. 
 }
 \usage{
-SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
-\method{SKAT.matrixfree}{lm}(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
-\method{SKAT.matrixfree}{glm}(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
-\method{SKAT.matrixfree}{lmekin}(G,weights=function(maf) dbeta(maf,1,25), model=NULL, kinship)
+SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...)
+\method{SKAT.matrixfree}{lm}(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...)
+\method{SKAT.matrixfree}{glm}(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...)
+\method{SKAT.matrixfree}{lmekin}(G,weights=function(maf) dbeta(maf,1,25), model=NULL, kinship,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,8 +27,11 @@ A weight function used in SKAT: the default is the standard one.
 \item{model}{
 A  linear model, generalised linear model, or \code{lmekin} object used for adjustment, or \code{NULL}
 }
+\item{kinship}{A (sparse) kinship matrix. The \code{model} will have used \code{2*kinship} in its
+\code{varlist} argument.
 }
-
+\item{\dots}{to keep CMD check happy}
+}
 \value{
 An object of class \code{matrixfree}
 }

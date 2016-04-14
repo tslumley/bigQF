@@ -1,5 +1,5 @@
 
-SKAT.matrixfree.lmekin<-function(G,  weights = function(maf) dbeta(maf, 1, 25), model, kinship){
+SKAT.matrixfree.lmekin<-function(G,  weights = function(maf) dbeta(maf, 1, 25), model=NULL, kinship,...){
   famSKAT(G, model, kinship, weights)
 }
 
