@@ -10,7 +10,8 @@ Computes the upper tail probability for quadratic forms in standard Normal varia
 \usage{
 pQF(x, M, method = c("ssvd", "lanczos", "satterthwaite"), neig = 100,
   tr2.sample.size = 500, q = NULL,
-  convolution.method = c("saddlepoint", "integration"))
+  convolution.method = c("saddlepoint", "integration"),
+  remainder.underflow=c("warn","missing","error"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,11 +34,14 @@ Power iteration parameter for the stochastic SVD (see the Halko et al reference)
   \item{convolution.method}{
 For either the "ssvd" or "lanczos" methods, how the convolution of the leading-eigenvalue terms is performed: by Kuonen's saddlepoint approximation or Davies' algorithm inverting the characteristic function
 }
+\item{remainder.underflow}{
+How should underflow of the remainder term (see Details) be handled? The default is a warning, with \code{"error"} an error is thrown, and with \code{"miss"} the return value will be \code{NaN}.
+}
 }
 \details{
 Increasing \code{neig} or \code{q} will improve the accuracy of approximation. In simulated human sequence data, \code{neig=100} is satisfactory for 5000 samples and markers. Increasing \code{q} should help when the singular values of \code{M} decrease slowly.  The default sample size for the randomized trace estimator seems to be large enough.
 
-If the remainder term in the approximation has less than 1 degree of freedom it will be dropped, with a warning. The approximation will then be anticonservative, but usually not seriously so. 
+If the remainder term in the approximation has less than 1 degree of freedom it will be dropped, and \code{remainder.underflow} controls how this is handled. The approximation will then be anticonservative, but usually not seriously so. 
 
 In earlier versions, \code{method="satterthwaite"} rounded the number of degrees of freedom up to the next integer; it now does not round.
 

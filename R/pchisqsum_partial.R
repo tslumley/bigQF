@@ -1,5 +1,5 @@
 pchisqsum_partial <-
-function(x,M,n=100,method=c("saddlepoint","integration"),tol=1e-3){
+function(x,M,n=100,method=c("saddlepoint","integration"),tol=1e-3,remainder=remainder.underflow){
 	method<-match.arg(method)
 	if (n>0){
 		ee<-svd::trlan.eigen(M,n,opts=list(tol=tol))
@@ -13,7 +13,7 @@ function(x,M,n=100,method=c("saddlepoint","integration"),tol=1e-3){
 	scale<-tr2.small/tr.small
 	nu<-(tr.small^2)/tr2.small
 	if (n>0)
-	    pchisqsum(x, c(rep(1,n),ceiling(nu)), c(ee$d, scale), method=method,lower.tail=FALSE)
+	    pchisqsum(x, c(rep(1,n),ceiling(nu)), c(ee$d, scale), method=method,lower.tail=FALSE,remainder=remainder.underflow)
 	else
 	    pchisq(x/scale, nu,lower.tail=FALSE)
 }

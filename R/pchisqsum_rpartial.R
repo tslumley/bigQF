@@ -1,5 +1,5 @@
 pchisqsum_rpartial <-
-function(x,M,n=100, tr2.sample.size=300, method=c("saddlepoint","integration")){
+function(x,M,n=100, tr2.sample.size=300, method=c("saddlepoint","integration"),remainder=remainder.underflow){
 	method<-match.arg(method)
 	ee<-svd::trlan.svd(M,neig=n)$d[1:n]^2
 	diags <- colSums(M^2)
@@ -14,5 +14,5 @@ function(x,M,n=100, tr2.sample.size=300, method=c("saddlepoint","integration")){
 	tr2.small<-tr2-sum(ee^2)
 	scale<-tr2.small/tr.small
 	nu<-(tr.small^2)/tr2.small
-    pchisqsum(x, c(rep(1,n), nu), c(ee, scale), method=method,lower.tail=FALSE)
+    pchisqsum(x, c(rep(1,n), nu), c(ee, scale), method=method,lower.tail=FALSE,remainder=remainder.underflow)
 }
