@@ -1,9 +1,10 @@
 
-is.square<-function(M) nrow(M)==ncol(M)
+is.square<-function(M) nrow(M)==ncol(M) && isTRUE(all.equal(M[,1],M[1,]))
 
-pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=500, q=NULL,  convolution.method=c("saddlepoint","integration")){
+pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=500, q=NULL,  convolution.method=c("saddlepoint","integration"), remainder.underflow=c("warn","missing","error")){
    method<-match.arg(method)
    conv.method<-match.arg(convolution.method)
+   remainder.underflow<-match.arg(remainder.underflow)
 
 ## sanity check
    if(method != "satterthwaite"){
@@ -14,20 +15,20 @@ pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sa
 ## sparse matrix
    if (inherits(M, "matrixfree")){
      if (is.null(q)) q<- 3
-     switch(method, ssvd=pchisqsum_smf(x,M$mult, M$tmult, M$ncol, M$trace, n=neig, q=q, tr2.sample.size=tr2.sample.size, method=conv.method),
-     lanczos= pchisqsum_lmf(x,M$mult, M$tmult, M$ncol,M$nrow, M$trace, n=neig,  tr2.sample.size=tr2.sample.size, method=conv.method),
+     switch(method, ssvd=pchisqsum_smf(x,M$mult, M$tmult, M$ncol, M$trace, n=neig, q=q, tr2.sample.size=tr2.sample.size, method=conv.method,remainder=remainder.underflow),
+     lanczos= pchisqsum_lmf(x,M$mult, M$tmult, M$ncol,M$nrow, M$trace, n=neig,  tr2.sample.size=tr2.sample.size, method=conv.method,remainder=remainder.underflow),
      satterthwaite= pchisqsum_spsatt(x,M$mult, M$tmult, M$ncol, M$trace,tr2.sample.size=tr2.sample.size))
 
    } else { ## square matrix H=G^TG
    if (is.square(M)){
       if (is.null(q)) q<- 1
-      switch(method, ssvd=pchisqsum_ssvd(x,M, n=neig, q=q,  method=conv.method),
-      lanczos= pchisqsum_partial(x,M, n=neig,  method=conv.method),
+      switch(method, ssvd=pchisqsum_ssvd(x,M, n=neig, q=q,  method=conv.method,remainder=remainder.underflow),
+      lanczos= pchisqsum_partial(x,M, n=neig,  method=conv.method,remainder=remainder.underflow),
       satterthwaite= pchisqsum_partial(x,M, n=0,  method=conv.method))
    } else { 
    if (is.null(q)) q<- 3
-      switch(method, ssvd=pchisqsum_rsvd(x,M, n=neig, q=q,  method=conv.method, tr2.sample.size=tr2.sample.size),
-      lanczos= pchisqsum_rpartial(x,M, n=neig,  method=conv.method, tr2.sample.size=tr2.sample.size),
+      switch(method, ssvd=pchisqsum_rsvd(x,M, n=neig, q=q,  method=conv.method, tr2.sample.size=tr2.sample.size,remainder=remainder.underflow),
+      lanczos= pchisqsum_rpartial(x,M, n=neig,  method=conv.method, tr2.sample.size=tr2.sample.size,remainder=remainder.underflow),
       satterthwaite= pchisqsum_Gsatt(x,M,  tr2.sample.size=tr2.sample.size))
    }
    }
@@ -130,7 +131,7 @@ rval<-list(
 
 
 
-pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","integration","satterthwaite")) 
+pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","integration","satterthwaite"),remainder=remainder.underflow) 
 {
     satterthwaite <- function(a, df) {
         if (any(df > 1)) {
@@ -145,7 +146,16 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
     ## can happen with randomised trace estimator if most remaining singular values are very small.
     ##
     if (any(bad.df <- (df<1))){
-      warning("Negative/fractional df removed")
+      if (remainder=="warn")
+            warning("Negative/fractional df removed")
+      else if (remainder=="error")
+	    stop("Negative/fractional df")
+
+      if(remainder=="missing"){
+            warning("NaN produced from negative/fractional df")
+            return(NaN*x)
+	}
+	    
       df[bad.df]<-1
       a[bad.df]<-0
     }
