@@ -131,7 +131,7 @@ rval<-list(
 
 
 
-pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","integration","satterthwaite"),remainder=remainder.underflow) 
+pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","integration","satterthwaite"),remainder="warn") 
 {
     satterthwaite <- function(a, df) {
         if (any(df > 1)) {
