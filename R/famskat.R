@@ -10,7 +10,7 @@ famSKAT<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25)
 
 	
     model$theta <- c(model$vcoef$id, model$sigma^2)
-    SIGMA <- model$theta[1] * 2 * kins + model$theta[2] * Diagonal(nrow(kins))
+    SIGMA <- model$theta[1] * 2 * kinship + model$theta[2] * Diagonal(nrow(kins))
     CholSigma<-t(chol(SIGMA)) 
     if (is.null(model$x)) stop("null model must be fitted with x=TRUE")
     Z<-model$x
