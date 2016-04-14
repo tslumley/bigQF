@@ -9,6 +9,9 @@ Make 'matrix-free' object for SKAT test
 }
 \usage{
 SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
+\method{SKAT.matrixfree}{lm}(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
+\method{SKAT.matrixfree}{glm}(G,weights=function(maf) dbeta(maf,1,25), model=NULL)
+\method{SKAT.matrixfree}{lmekin}(G,weights=function(maf) dbeta(maf,1,25), model=NULL, kinship)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,7 +22,7 @@ A 0/1/2 matrix whose columns are markers and whose rows are samples. Should be m
 A weight function used in SKAT: the default is the standard one.
 }
 \item{model}{
-A  linear model or generalised linear model object used for adjustment, or \code{NULL}
+A  linear model, generalised linear model, or \code{lmekin} object used for adjustment, or \code{NULL}
 }
 }
 
@@ -27,7 +30,7 @@ A  linear model or generalised linear model object used for adjustment, or \code
 An object of class \code{matrixfree}
 }
 \details{
-If the adjustment model is \code{NULL} the object contains the trace of the underlying quadratic form, if the adjustment model is not \code{NULL} the trace will be estimated using Hutchinson's randomised estimator inside \code{\link{pQF}}
+If the adjustment model is \code{NULL} the object contains the trace of the underlying quadratic form, if the adjustment model is not \code{NULL} the trace will be estimated using Hutchinson's randomised estimator inside \code{\link{pQF}}.  The \code{lmekin} method calls \code{\link{famSKAT}}.
 
 }
 
@@ -53,6 +56,7 @@ data(sequence)
 skat<-SKAT.matrixfree(sequence)
 skat$trace
 pQF(c(33782471,7e7,1e8), skat,n=100, tr2.sample.size=500)
+
   
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

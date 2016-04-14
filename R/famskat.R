@@ -1,16 +1,20 @@
 
-famSKAT<-function(G,  formula, kinship, data=NULL, weights = function(maf) dbeta(maf, 1, 25)){
+SKAT.matrixfree.lmekin<-function(G,  weights = function(maf) dbeta(maf, 1, 25), model, kinship){
+  famSKAT(G, model, kinship, weights)
+}
+
+famSKAT<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25)){
 	center <- colMeans(G)
     ww <- weights(center/2)
     spG <- Matrix(G, sparse = TRUE) %*% Diagonal(x = ww)
 
-	nullmodel <- coxme::lmekin(formula = update(formula, 
-            "~.+ (1|id)"), data = data, varlist = 2 * kins, method = "REML",x=TRUE)
-    nullmodel$theta <- c(nullmodel$vcoef$id, nullmodel$sigma^2)
-    SIGMA <- nullmodel$theta[1] * 2 * kins + nullmodel$theta[2] * Diagonal(nrow(kins))
-	CholSigma<-t(chol(SIGMA))
-	Z<-nullmodel$x
-	qr<-qr(as.matrix(solve(CholSigma,Z)))
+	
+    model$theta <- c(model$vcoef$id, model$sigma^2)
+    SIGMA <- model$theta[1] * 2 * kins + model$theta[2] * Diagonal(nrow(kins))
+    CholSigma<-t(chol(SIGMA)) 
+    if (is.null(model$x)) stop("null model must be fitted with x=TRUE")
+    Z<-model$x
+    qr<-qr(as.matrix(solve(CholSigma,Z)))
 	
 	#debugging
 	# sinvZ<-solve(CholSigma,Z)
