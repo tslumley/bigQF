@@ -11,7 +11,7 @@ pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sa
      mindim<-min(dim(M))
      if (mindim < neig) stop("Can't have more eigenvalues than min(nrow,ncol)")
    }
-  
+
 ## sparse matrix
    if (inherits(M, "matrixfree")){
      if (is.null(q)) q<- 3
@@ -25,7 +25,7 @@ pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sa
       switch(method, ssvd=pchisqsum_ssvd(x,M, n=neig, q=q,  method=conv.method,remainder=remainder.underflow),
       lanczos= pchisqsum_partial(x,M, n=neig,  method=conv.method,remainder=remainder.underflow),
       satterthwaite= pchisqsum_partial(x,M, n=0,  method=conv.method))
-   } else { 
+   } else {
    if (is.null(q)) q<- 3
       switch(method, ssvd=pchisqsum_rsvd(x,M, n=neig, q=q,  method=conv.method, tr2.sample.size=tr2.sample.size,remainder=remainder.underflow),
       lanczos= pchisqsum_rpartial(x,M, n=neig,  method=conv.method, tr2.sample.size=tr2.sample.size,remainder=remainder.underflow),
@@ -43,8 +43,8 @@ sparse.matrixfree<-function(M){
 
   rval<-list(
     mult=function(X) M%*%X,
-	
-    tmult=function(X) crossprod(M,X),	
+
+    tmult=function(X) crossprod(M,X),
     trace=sum(M^2),
     ncol=ncol(M),
     nrow=nrow(M)
@@ -65,13 +65,17 @@ SKAT.matrixfree.default<-function(G,weights=function(maf) dbeta(maf,1,25),model=
     mult=function(X){
 	 t(t(spG%*%X)-colSums(cntr*as.matrix(X)))/sqrt(2)
 	},
-	
+
     tmult=function(X){
 	(crossprod(spG,X)- outer(cntr,colSums(as.matrix(X))))/sqrt(2)
-	}	,	
+	}	,
     trace=(sum(spG^2)-sum(cntr^2)*nrow(G))/2,
     ncol=ncol(G),
-    nrow=nrow(G)
+    nrow=nrow(G),
+    Q=function(y) {
+        s<-(crossprod(spG,y)- outer(cntr,colSums(as.matrix(y))))/sqrt(2)
+        sum(s^2)/var(y)
+    }
   )
  class(rval)<-"matrixfree"
  rval
@@ -86,7 +90,7 @@ SKAT.matrixfree.lm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NULL
   ww<-weights(center/2)
   spG<-Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
   qr<-model$qr
-
+  y<-model$fitted+model$residuals
 
 rval<-list(
      mult=function(X){
@@ -94,10 +98,16 @@ rval<-list(
      },
      tmult=function(X){
          crossprod(spG,qr.resid(qr,X))/sqrt(2)
-      },   
+      },
     trace=NULL,
     ncol=ncol(G),
-    nrow=nrow(G)
+    nrow=nrow(G),
+    Q=function(ynew=NULL){
+        if (is.null( ynew))
+            ynew<-y
+        s=crossprod(spG,qr.resid(qr,y))/sqrt(2)
+        sum(s^2)/(summary(model)$sigma^2)
+    }
   )
   class(rval)<-"matrixfree"
   rval
@@ -116,7 +126,7 @@ rval<-list(
      },
      tmult=function(X){
          crossprod(spG,qr.resid(qr,X))/sqrt(2)
-      },   
+      },
     trace=NULL,
     ncol=ncol(G),
     nrow=nrow(G)
@@ -131,7 +141,7 @@ rval<-list(
 
 
 
-pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","integration","satterthwaite"),remainder="warn") 
+pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","integration","satterthwaite"),remainder="warn")
 {
     satterthwaite <- function(a, df) {
         if (any(df > 1)) {
@@ -142,7 +152,7 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
         list(scale = tr * tr2, df = length(a)/tr2)
     }
     method <- match.arg(method)
-    
+
     ## can happen with randomised trace estimator if most remaining singular values are very small.
     ##
     if (any(bad.df <- (df<1))){
@@ -155,17 +165,17 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
             warning("NaN produced from negative/fractional df")
             return(NaN*x)
 	}
-	    
+
       df[bad.df]<-1
       a[bad.df]<-0
     }
     df<-round(df)
     ##
-   
-   
+
+
     sat <- satterthwaite(a, df)
     guess <- pchisq(x/sat$scale, sat$df, lower.tail = lower.tail)
-    if (method == "satterthwaite") 
+    if (method == "satterthwaite")
         return(guess)
     method <- match.arg(method)
     if (method == "integration" && !suppressWarnings(requireNamespace("CompQuadForm"))) {
@@ -178,11 +188,11 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
     if (method == "integration") {
             for (i in seq(length = length(x))) {
                 f <- davies(x[i], a, df, acc = 1e-09)
-                if (f$ifault > 0) 
+                if (f$ifault > 0)
                   warning("Probable loss of accuracy ")
                 guess[i] <- f$Qq
-            }   
-        if (lower.tail) 
+            }
+        if (lower.tail)
             guess <- 1 - guess
         return(guess)
     }
@@ -190,7 +200,7 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
         for (i in seq(length = length(x))) {
             lambda <- rep(a, df)
             sad <- sapply(x, saddle, lambda = lambda)
-            if (lower.tail) 
+            if (lower.tail)
                 sad <- 1 - sad
             guess <- ifelse(is.na(sad), guess, sad)
         }
@@ -198,15 +208,15 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
     }
 }
 
-saddle<-function (x, lambda) 
+saddle<-function (x, lambda)
 {
     d <- max(lambda)
     lambda <- lambda/d
     x <- x/d
     k0 <- function(zeta) -sum(log(1 - 2 * zeta * lambda))/2
-    kprime0 <- function(zeta) sapply(zeta, function(zz) sum(lambda/(1 - 
+    kprime0 <- function(zeta) sapply(zeta, function(zz) sum(lambda/(1 -
         2 * zz * lambda)))
-    kpprime0 <- function(zeta) 2 * sum(lambda^2/(1 - 2 * zeta * 
+    kpprime0 <- function(zeta) 2 * sum(lambda^2/(1 - 2 * zeta *
         lambda)^2)
     n <- length(lambda)
     if (any(lambda < 0)) {
@@ -219,11 +229,11 @@ saddle<-function (x, lambda)
         lmin <- -length(lambda)/(2 * x)
     }
     lmax <- min(1/(2 * lambda[lambda > 0])) * 0.99999
-    hatzeta <- uniroot(function(zeta) kprime0(zeta) - x, lower = lmin, 
+    hatzeta <- uniroot(function(zeta) kprime0(zeta) - x, lower = lmin,
         upper = lmax, tol = 1e-08)$root
     w <- sign(hatzeta) * sqrt(2 * (hatzeta * x - k0(hatzeta)))
     v <- hatzeta * sqrt(kpprime0(hatzeta))
-    if (abs(hatzeta) < 1e-04) 
+    if (abs(hatzeta) < 1e-04)
         NA
     else pnorm(w + log(v/w)/w, lower.tail = FALSE)
 }
