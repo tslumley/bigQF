@@ -7,6 +7,6 @@ Author: Thomas Lumley
 Maintainer: Thomas Lumley <t.lumley@auckland.ac.nz>
 Description: A computationally-efficient leading-eigenvalue approximation to tail probabilities and quantiles of large quadratic forms, in particular for the Sequence Kernel Association Test (SKAT) used in genomics. Also provides stochastic singular value decomposition for dense or sparse matrices.
 URL: https://github.com/tslumley/bigQF
-Imports: svd, CompQuadForm, Matrix, stats
+Imports: svd, CompQuadForm, Matrix, stats, coxme
 Depends: methods
-License: LGPL
+License: GPL-2

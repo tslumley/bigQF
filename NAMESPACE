@@ -4,6 +4,7 @@ import(methods)
 importFrom(svd, trlan.eigen, trlan.svd, extmat)
 importFrom(CompQuadForm, davies)
 importFrom(stats, pchisq,qchisq)
+importFrom(coxme, lmekin)
 
 export(ssvd, seigen, pQF,  SKAT.matrixfree, sparse.matrixfree, famSKAT)
 

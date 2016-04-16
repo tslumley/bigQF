@@ -45,4 +45,22 @@ The matrix and test statistic both differ by a factor of \code{var(y)/2} from \c
 \code{\link{SKAT.matrixfree}}, \code{\link{pQF}}
 }
 \examples{
+data(seqMetaExample)
+
+m<-coxme::lmekin(y~sex+bmi+(1|id),data=pheno2,varlist=2*kins,
+	x=TRUE,y=TRUE,method="REML")
+
+#first gene
+g1snps<-c("1000001", "1000002", "1000003", "1000004", "1000005", "1000006", 
+"1000007", "1000008", "1000009", "1000010", "1000012", "1000013", 
+"1000014", "1000015")
+Z2gene1<-Z2[,g1snps]
+
+f<-famSKAT(Z2gene1, m, kins)
+Q<-f$Q()
+all.equal(Q, 56681.209)
+## correct p is 0.742756401
+pQF(Q,f,neig=4)
+
+
 }
