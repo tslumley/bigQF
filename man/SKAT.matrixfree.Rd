@@ -8,7 +8,7 @@
 Make 'matrix-free' object for SKAT test
 }
 \description{
-'Matrix-free' or 'implicit' linear algebra uses a matrix only through the linear operations of multiplying by the matrix or its transpose. It's suitable for sparse matrices, and also for structured matrices that are not sparse but still have fast algorithms for multiplication.  The Sequence Kernel Association Test is typically performed on sparse genotype data, but the matrix involved in computations has been centered and is no longer sparse. 
+'Matrix-free' or 'implicit' linear algebra uses a matrix only through the linear operations of multiplying by the matrix or its transpose. It's suitable for sparse matrices, and also for structured matrices that are not sparse but still have fast algorithms for multiplication.  The Sequence Kernel Association Test is typically performed on sparse genotype data, but the matrix involved in computations has been centered and is no longer sparse.
 }
 \usage{
 SKAT.matrixfree(G,weights=function(maf) dbeta(maf,1,25), model=NULL,...)
@@ -63,7 +63,24 @@ skat<-SKAT.matrixfree(sequence)
 skat$trace
 pQF(c(33782471,7e7,1e8), skat,n=100, tr2.sample.size=500)
 
-  
+data(SKAT.example)
+
+skat1mf <- SKAT.matrixfree(SKAT.example$Z)
+(Q<-skat1mf$Q(SKAT.example$y.c))
+all.equal(as.numeric(Q), 234803.786)
+
+## correct value is 0.01874576
+pQF(Q, skat1mf, neig=4, convolution.method="integration")
+
+
+skat3mf <- SKAT.matrixfree(SKAT.example$Z, model=lm(y.c~X, data=SKAT.example))
+(Q<-skat3mf$Q())
+all.equal(Q, 298041.542)
+
+## correct value is 0.002877041
+pQF(Q, skat3mf, neig=4, convolution.method="integration")
+
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
