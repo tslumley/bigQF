@@ -103,8 +103,8 @@ rval<-list(
     ncol=ncol(G),
     nrow=nrow(G),
     Q=function(ynew=NULL){
-        if (is.null( ynew))
-            ynew<-y
+        if (!is.null( ynew))
+            y<-ynew
         s=crossprod(spG,qr.resid(qr,y))/sqrt(2)
         sum(s^2)/(summary(model)$sigma^2)
     }
