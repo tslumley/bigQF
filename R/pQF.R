@@ -105,8 +105,9 @@ rval<-list(
     Q=function(ynew=NULL){
         if (!is.null( ynew))
             y<-ynew
-        s=crossprod(spG,qr.resid(qr,y))/sqrt(2)
-        sum(s^2)/(summary(model)$sigma^2)
+        res <- qr.resid(qr,y)
+        s=crossprod(spG,res)/sqrt(2)
+        sum(s^2)/(sum(res^2)/model$df.residual)
     }
   )
   class(rval)<-"matrixfree"
