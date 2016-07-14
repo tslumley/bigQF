@@ -1,5 +1,6 @@
 \name{famSKAT}
 \alias{famSKAT}
+\alias{update.famSKAT}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Implicit matrix for family-based SKAT test
@@ -9,6 +10,7 @@ Like \code{link{SKAT.matrixfree}} but for the family-based test of Chen and coll
 }
 \usage{
 famSKAT(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25))
+\S3method{update}{famSKAT}(object,G)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,18 +28,20 @@ The sparse kinship matrix: the \code{model} will have used \code{2*kinship} in i
 A weight function used in SKAT: the default is the standard one.
 
 }
+\item{object}{An existing \code{famSKAT} object to be updated with a new set of genotypes (eg for a new gene or genomic window), keeping the same phenotype and kinship structure.  Avoids recomputing the Cholesky square root of the phenotype variance matrix, which will often be a computational bottleneck.
+}
 }
 
 
 \value{
-An object of class \code{matrixfree}
+An object of class \code{c("famSKAT","matrixfree")}
 }
 \references{
 Chen H, Meigs JM, Dupuis J (2013) Sequence Kernel Association Test for Quantitative Traits in Family Samples. Genet Epidemiol. 37(2): 196-204.
 }
 
 \note{
-The matrix and test statistic both differ by a factor of \code{var(y)/2} from \code{SKAT.matrixfree} when used with unrelated individuals.
+The matrix and test statistic both differ by a factor of \code{var(y)/2} from \code{SKAT.matrixfree} when used with unrelated individuals (because the Chen et al reference differs from the original SKAT paper by the same factor)
 }
 
 

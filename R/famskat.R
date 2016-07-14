@@ -39,6 +39,38 @@ famSKAT<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25)
         sum(s^2)
     }
     )
-    class(rval) <- "matrixfree"
+    class(rval) <- c("famSKAT","matrixfree")
     rval
+}
+
+update.famSKAT<-function(object, G){
+    center <- colMeans(G)
+    ww <- weights(center/2)
+    spG <- Matrix(G, sparse = TRUE) %*% Diagonal(x = ww)
+
+    ## Get the computationally expensive bits from the existing object
+    e<-envirobment(object$rval)
+    CholSigma<-get("CholSigma",e)
+    SIGMA<-get("SIGMA",e)
+    qr<-get("qr",e)
+    res<-get("res",e)
+
+    ## return new object
+    rval <- list(mult = function(X) {
+        base::qr.resid(qr,as.matrix(solve(CholSigma,(spG %*% X))))
+    }, tmult = function(X) {
+        crossprod(spG, solve(t(CholSigma), base::qr.resid(qr,X)))
+    },
+    trace = NULL,
+    ncol = ncol(G),
+    nrow = nrow(G),
+    Q=function(){
+        stdres<-solve(SIGMA,res)
+        s=crossprod(spG, stdres)
+        sum(s^2)
+    }
+    )
+    class(rval) <- c("famSKAT","matrixfree")
+    rval
+    
 }

@@ -14,4 +14,6 @@ S3method(SKAT.matrixfree,default)
 S3method(SKAT.matrixfree,lm)
 S3method(SKAT.matrixfree,glm)
 S3method(SKAT.matrixfree,lmekin)
+S3method(update,famSKAT)
+
 
