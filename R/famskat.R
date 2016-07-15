@@ -43,13 +43,13 @@ famSKAT<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25)
     rval
 }
 
-update.famSKAT<-function(object, G){
+update.famSKAT<-function(object, G,...){
     center <- colMeans(G)
     ww <- weights(center/2)
     spG <- Matrix(G, sparse = TRUE) %*% Diagonal(x = ww)
 
     ## Get the computationally expensive bits from the existing object
-    e<-envirobment(object$rval)
+    e<-environment(object$rval)
     CholSigma<-get("CholSigma",e)
     SIGMA<-get("SIGMA",e)
     qr<-get("qr",e)
