@@ -8,7 +8,7 @@ ssvd<-function(M,n,U=FALSE, V=FALSE,q=3, p=10){
    }
    s<-svd(B,nu=if (U) n else 0, nv=if(V) n else 0)
    s$d<-s$d[1:n]
-   if (U) s$v<-Q%*%s$v
+   if (V) s$v<-Q%*%s$v
    s
 }
 
