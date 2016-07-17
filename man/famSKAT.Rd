@@ -10,7 +10,7 @@ Like \code{link{SKAT.matrixfree}} but for the family-based test of Chen and coll
 }
 \usage{
 famSKAT(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25))
-\S3method{update}{famSKAT}(object,G)
+\S3method{update}{famSKAT}(object,G,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,6 +30,7 @@ A weight function used in SKAT: the default is the standard one.
 }
 \item{object}{An existing \code{famSKAT} object to be updated with a new set of genotypes (eg for a new gene or genomic window), keeping the same phenotype and kinship structure.  Avoids recomputing the Cholesky square root of the phenotype variance matrix, which will often be a computational bottleneck.
 }
+\item{...}{for future expansion}
 }
 
 
@@ -66,5 +67,13 @@ all.equal(Q, 56681.209)
 ## correct p is 0.742756401
 pQF(Q,f,neig=4)
 
+## gene10
+g10snps<-as.character(1000017:1000036)
+Z2gene10<-Z2[,g10snps]
+f10<-update(f, Z2gene10)
+Q10<-f10$Q()
+all.equal(Q10,164656.19)
+pQF(Q10,f10,neig=4)
+#  gene10 0.090694194 164656.19 0.2866667   600    20
 
 }
