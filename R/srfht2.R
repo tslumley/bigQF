@@ -9,7 +9,7 @@ function(A,k,q=0){
 	Q<-qr.Q(qr(t(AOmega)))
 	for(i in seq_len(q)){
 		tildeQ<-qr.Q(qr(A%*%Q))
-		Q<-qr.Q(qr(t(A)%*%tildeQ))
+		Q<-qr.Q(qr(crossprod(A,tildeQ)))
 	}
 	Q
 	}

@@ -8,7 +8,7 @@ function(A,k,q=0){
 	AOmega<-fht(Astar)[idx,]/sqrt(k)
 	Q<-qr.Q(qr(t(AOmega)))
 	for(i in seq_len(q)){
-		tildeQ<-qr.Q(qr(t(A)%*%Q))
+		tildeQ<-qr.Q(qr(crossprod(A,Q)))
 		Q<-qr.Q(qr(A%*%tildeQ))
 	}
 	Q
