@@ -43,7 +43,16 @@ Increasing \code{neig} or \code{q} will improve the accuracy of approximation. I
 
 If the remainder term in the approximation has less than 1 degree of freedom it will be dropped, and \code{remainder.underflow} controls how this is handled. The approximation will then be anticonservative, but usually not seriously so. 
 
-In earlier versions, \code{method="satterthwaite"} rounded the number of degrees of freedom up to the next integer; it now does not round.
+In earlier versions, \code{method="satterthwaite"} rounded the number of
+degrees of freedom up to the next integer; it now does not round.
+
+In the current version when \code{M} is of class \code{"matrix-free"}
+and \code{method="ssvd"}, an improved estimator of the remainder term is
+used. Instead of using Hutchinson's randomised trace estimator and
+subtracting the known eigenvalues, we apply the randomised trace
+estimator after projecting orthogonal to the known eigenvectors. After
+more evaluation, the improvement is likely to be extended to the other
+methods for rectangular matrices.
 
 
 }
