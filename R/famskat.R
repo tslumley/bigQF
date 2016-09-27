@@ -3,7 +3,10 @@ SKAT.matrixfree.lmekin<-function(G,  weights = function(maf) dbeta(maf, 1, 25), 
     famSKAT(G, model, kinship, weights)
 }
 
-famSKAT<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25)){
+
+famSKAT<-function(G, model, ...) UseMethod("famSKAT",model)
+
+famSKAT.lmekin<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25),...){
     center <- colMeans(G)
     ww <- weights(center/2)
     spG <- Matrix(G, sparse = TRUE) %*% Diagonal(x = ww)
@@ -39,11 +42,11 @@ famSKAT<-function(G,  model, kinship,  weights = function(maf) dbeta(maf, 1, 25)
         sum(s^2)
     }
     )
-    class(rval) <- c("famSKAT","matrixfree")
+    class(rval) <- c("famSKAT_lmekin","famSKAT","matrixfree")
     rval
 }
 
-update.famSKAT<-function(object, G,...){
+update.famSKAT_lmekin<-function(object, G,...){
     center <- colMeans(G)
 
     
@@ -74,7 +77,7 @@ update.famSKAT<-function(object, G,...){
         sum(s^2)
     }
     )
-    class(rval) <- c("famSKAT","matrixfree")
+    class(rval) <- c("famSKAT_lmekin","famSKAT","matrixfree")
     rval
     
 }

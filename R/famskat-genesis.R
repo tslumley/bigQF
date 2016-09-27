@@ -1,9 +1,12 @@
 ##
 ## Not done yet
 ##
+##  we need inverse of cholesky root, not cholesky root of inverse
+##
 
-famSKAT.mattmodel<-function (G, model, weights = function(maf) dbeta(maf, 
-    1, 25)) 
+
+famSKAT.genesis_lmm <-function (G, model, weights = function(maf) dbeta(maf, 
+    1, 25),...) 
 {
     center <- colMeans(G)
     ww <- weights(center/2)
@@ -25,6 +28,6 @@ famSKAT.mattmodel<-function (G, model, weights = function(maf) dbeta(maf,
         s = crossprod(spG, stdres)
         sum(s^2)
     })
-    class(rval) <- "matrixfree"
+    class(rval) <- c("famSKAT_genesis","famSKAT","matrixfree")
     rval
 }

@@ -1,6 +1,8 @@
 \name{famSKAT}
 \alias{famSKAT}
-\alias{update.famSKAT}
+\alias{update.famSKAT_lmekin}
+\alias{famSKAT.lmekin}
+\alias{famSKAT.genesis_lmm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Implicit matrix for family-based SKAT test
@@ -9,8 +11,9 @@ Implicit matrix for family-based SKAT test
 Like \code{link{SKAT.matrixfree}} but for the family-based test of Chen and colleagues
 }
 \usage{
-famSKAT(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25))
-\S3method{update}{famSKAT}(object,G,...)
+famSKAT(G, model,...)
+\method{famSKAT}{lmekin}(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25),...)
+\S3method{update}{famSKAT_lmekin}(object,G,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,7 +22,7 @@ A 0/1/2 matrix whose columns are markers and whose rows are samples. Should be m
 
 }
   \item{model}{
-Object of class \code{lmekin} giving the adjustment model, which must have been fitted with \code{x=TRUE}
+Object representing a linear mixed model for covariate adjustment. Current method is for class \code{lmekin} which must have been fitted with \code{x=TRUE}
 }
   \item{kinship}{
 The sparse kinship matrix: the \code{model} will have used \code{2*kinship} in its \code{varlist} argument.
@@ -74,6 +77,6 @@ f10<-update(f, Z2gene10)
 Q10<-f10$Q()
 all.equal(Q10,164656.19)
 pQF(Q10,f10,neig=4)
-#  gene10 0.090694194 164656.19 0.2866667   600    20
+
 
 }
