@@ -1,6 +1,7 @@
 \name{famSKAT}
 \alias{famSKAT}
 \alias{update.famSKAT_lmekin}
+\alias{update.famSKAT_genesis}
 \alias{famSKAT.lmekin}
 \alias{famSKAT.genesis_lmm}
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -13,7 +14,9 @@ Like \code{link{SKAT.matrixfree}} but for the family-based test of Chen and coll
 \usage{
 famSKAT(G, model,...)
 \method{famSKAT}{lmekin}(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25),...)
+\method{famSKAT}{genesis_lmm}(G, model, threshold=1e-10,  weights = function(maf) dbeta(maf, 1, 25),...)
 \S3method{update}{famSKAT_lmekin}(object,G,...)
+\S3method{update}{famSKAT_genesis}(object,G,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,10 +25,13 @@ A 0/1/2 matrix whose columns are markers and whose rows are samples. Should be m
 
 }
   \item{model}{
-Object representing a linear mixed model for covariate adjustment. Current method is for class \code{lmekin} which must have been fitted with \code{x=TRUE}
+Object representing a linear mixed model for covariate adjustment. Current methods are for class \code{lmekin} which must have been fitted with \code{x=TRUE}, and for the output of \code{fitNullMM} from the \code{GENESIS} package.
 }
   \item{kinship}{
 The sparse kinship matrix: the \code{model} will have used \code{2*kinship} in its \code{varlist} argument.
+}
+\item{threshold}{
+A threshold for setting elements of the phenotype precision matrix to exact zeros.
 }
   \item{weights}{
 A weight function used in SKAT: the default is the standard one.

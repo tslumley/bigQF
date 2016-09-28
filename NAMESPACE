@@ -17,6 +17,7 @@ S3method(SKAT.matrixfree,lm)
 S3method(SKAT.matrixfree,glm)
 S3method(SKAT.matrixfree,lmekin)
 S3method(update,famSKAT_lmekin)
+S3method(update,famSKAT_genesis)
 S3method(famSKAT,lmekin)
 S3method(famSKAT,genesis_lmm)
 
