@@ -52,6 +52,8 @@ Chen H, Meigs JM, Dupuis J (2013) Sequence Kernel Association Test for Quantitat
 
 \note{
 The matrix and test statistic both differ by a factor of \code{var(y)/2} from \code{SKAT.matrixfree} when used with unrelated individuals (because the Chen et al reference differs from the original SKAT paper by the same factor)
+
+At the time of writing, the output from code{GENESIS::fitNullMM} does not have a class attribute. You must assign the class \code{"genesis_lmm"} to it before use. 
 }
 
 
