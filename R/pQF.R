@@ -120,6 +120,7 @@ SKAT.matrixfree.glm<-function(G,weights=function(maf) dbeta(maf,1,25), model=NUL
   fw <-sqrt( model$family$variance(fitted(model)))
   spG<-Diagonal(x=fw)%*%Matrix(G,sparse=TRUE)%*%Diagonal(x=ww)
   qr<-model$qr
+  qr0<-NULL  ## for computing Q if needed
 
 rval<-list(
      mult=function(X){
@@ -127,7 +128,18 @@ rval<-list(
      },
      tmult=function(X){
          crossprod(spG,qr.resid(qr,X))/sqrt(2)
-      },
+     },
+    Q=function(ynew=NULL){
+        if (is.null(qr0))
+            qr0<<-qr(model.matrix(model))
+        if (is.null( ynew))
+            y<-model$y
+        else
+            y<-ynew
+        res <- qr.resid(qr0,y)
+        s=crossprod(spG,Diagonal(x=1/fw)%*%res)/sqrt(2)
+        sum(s^2)
+    },
     trace=NULL,
     ncol=ncol(G),
     nrow=nrow(G)
