@@ -14,7 +14,7 @@ Like \code{link{SKAT.matrixfree}} but for the family-based test of Chen and coll
 \usage{
 famSKAT(G, model,...)
 \method{famSKAT}{lmekin}(G, model, kinship,  weights = function(maf) dbeta(maf, 1, 25),...)
-\method{famSKAT}{genesis_lmm}(G, model, threshold=1e-10,  weights = function(maf) dbeta(maf, 1, 25),...)
+\method{famSKAT}{GENESIS.nullMixedModel}(G, model, threshold=1e-10,  weights = function(maf) dbeta(maf, 1, 25),...)
 \S3method{update}{famSKAT_lmekin}(object,G,...)
 \S3method{update}{famSKAT_genesis}(object,G,...)
 }
@@ -53,7 +53,11 @@ Chen H, Meigs JM, Dupuis J (2013) Sequence Kernel Association Test for Quantitat
 \note{
 The matrix and test statistic both differ by a factor of \code{var(y)/2} from \code{SKAT.matrixfree} when used with unrelated individuals (because the Chen et al reference differs from the original SKAT paper by the same factor)
 
-At the time of writing, the output from code{GENESIS::fitNullMM} does not have a class attribute. You must assign the class \code{"genesis_lmm"} to it before use. 
+At the time of writing, the output from \code{GENESIS::fitNullMM} does
+not have a class attribute. You must assign the class
+\code{"GENESIS.nullMixedModel"} to it before use. This should become
+unnecessary at the next Bioconductor release.
+
 }
 
 

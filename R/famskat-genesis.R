@@ -3,7 +3,7 @@
 ##
 
 
-famSKAT.genesis_lmm <-function (G, model,threshold=1e-10, weights = function(maf) dbeta(maf, 
+famSKAT.GENESIS.nullMixedModel <-function (G, model,threshold=1e-10, weights = function(maf) dbeta(maf, 
     1, 25),...) 
 {
     center <- colMeans(G)
