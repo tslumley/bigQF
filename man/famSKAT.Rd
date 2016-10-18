@@ -3,7 +3,7 @@
 \alias{update.famSKAT_lmekin}
 \alias{update.famSKAT_genesis}
 \alias{famSKAT.lmekin}
-\alias{famSKAT.genesis_lmm}
+\alias{famSKAT.GENESIS.nullMixedModel}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Implicit matrix for family-based SKAT test
