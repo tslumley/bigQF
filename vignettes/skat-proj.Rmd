@@ -1,0 +1,56 @@
+---
+title: "SKAT, weights, and projections"
+author: "Thomas Lumley"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SKAT, weights, and projections}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+The original SKAT statistic for linear and generalised linear models is 
+$$Q=(y-\hat\mu)'GW^2G'(y-\hat\mu)=(y-\hat\mu)'K(y-\hat\mu)$$
+where $G$ is $N\times M$ genotype matrix, and $W$ is a weight matrix that in practice is diagonal. I've changed the original notation from $W$ to $W^2$, because everyone basically does. The Harvard group has a factor of 1/2 somewhere in here, the BU/CHARGE group doesn't. 
+
+When the adjustment model isn't ordinary linear regression, there is a second weight matrix, which I'll write $\Sigma$, giving the metric that makes $y\mapsto y-\hat\mu$ the projection orthogonal to the range of $X$. That is
+$$\hat\mu = \left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)Y$$
+Note that both
+$$\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)$$ 
+and
+$$I-\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)$$
+are projections. Usually $V=\Sigma$, but that's not necessary. 
+
+The matrix whose eigenvalues are needed for SKAT is 
+$H=P_0^{1/2}KP_0^{1/2}$ (or $K^{1/2}P_0K^{1/2}$) where
+$$P_0=V^{1/2}\left[I-\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)\right]V^{1/2}$$
+is the covariance matrix of the the residuals, with $V=\mathop{var}[Y]$. 
+
+
+`famSKAT` has test statistic
+$$Q=(y-\hat\mu)'V^{-1}GW^2G'V^{-1}(y-\hat\mu)=(y-\hat\mu)'V^{-1}KV^{-1}(y-\hat\mu)$$
+so the matrix $H$ is 
+$H=P_0^{1/2}V^{-1}KV^{-1}P_0^{1/2}$.
+
+When we want to take a square root of $P_0$ it helps a lot that the central piece is a projection, and so is idempotent: we can define
+$$\Pi_0=\left[I-\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)\right]$$
+and write $P_0=V^{1/2}\Pi_0V^{1/2}=V^{1/2}\Pi_0\Pi_0V^{1/2}$.
+
+Now consider $\tilde G$, with $H=\tilde G^T\tilde G$. We can take
+$\tilde G = WG'V^{-1}V^{1/2}\Pi_0=WG'V^{-1/2}\Pi_0$
+where $G$ is sparse, $W$ is diagonal. The projection $\Pi_0$ was needed to fit the adjustment model, so it will be fast.  In family data where $V=\Sigma$ is based on expected relatedness from a pedigree, the Cholesky square root $R=V^{1/2}=\Sigma^{1/2}$ will be sparse. 
+
+Let $f$ be the size of the largest pedigree. We should still be able to multiply a vector by $\tilde G$ in $O(MN\alpha+Nf^2)$ time where $\alpha\ll 1$ depends on the sparseness of $G$. If so, we can compute the leading-eigenvalue approximation in $O(MNk\alpha+Nkf^2)$ time. (In fact, we can replace $f^2$ by the average of the squares of number of relatives for everyone in the sample)
+
+The relevant bits of the code, the functions that multiply by $\tilde G$ and $\tilde G^T$, look like
+```{r, eval=FALSE}
+CholSigma<-t(chol(SIGMA))
+Z<-nullmodel$x
+qr<-qr(as.matrix(solve(CholSigma,Z)))
+rval <- list(
+    mult = function(X) {
+      base::qr.resid(qr,as.matrix(solve(CholSigma,(spG %*% X))))
+        }, 
+    tmult = function(X) {
+      crossprod(spG, solve(t(CholSigma), base::qr.resid(qr,X)))
+    })
+```
