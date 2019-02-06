@@ -1,3 +1,6 @@
+#include <R.h>
+#include <Rinternals.h>
+
 // (a,b) -> (a+b,a-b) without overflow
 void rotate(double x[], int a, int b)
 {
@@ -39,4 +42,20 @@ void mfwht(double data[], int *nrow, int *ncol){
 
   for(int i=0; i < *ncol; i++){ fwht(data+(i * *nrow), nrow);}
 
+}
+
+SEXP big_mfwht(SEXP data){
+
+  SEXP answer = PROTECT(Rf_duplicate(data));
+  
+  SEXP dims = PROTECT(getAttrib(data, Rf_install("dim")));
+  int nrow = INTEGER(dims)[0];
+  int ncol = INTEGER(dims)[1];
+  UNPROTECT(1); /* dims */
+  
+  for(int i=0; i < ncol; i++){ fwht( REAL(answer)+(i * nrow), &nrow);}
+
+  UNPROTECT(1); /* answer */
+  
+  return answer;
 }
