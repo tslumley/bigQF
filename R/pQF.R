@@ -197,7 +197,7 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
         method <- "saddlepoint"
     }
 
-    threshold<-getOption("bigQF.davies.threshold"))
+    threshold<-getOption("bigQF.davies.threshold")
     if(is.null(threshold)) threshold <- 1e-9
     
     abstol <- guess/1000
