@@ -54,6 +54,8 @@ estimator after projecting orthogonal to the known eigenvectors. After
 more evaluation, the improvement is likely to be extended to the other
 methods for rectangular matrices.
 
+By default, Davies's algorithm is run with a tolerance of \code{1e-9}. This can be changed by setting, eg,  \code{options(bigQF.davies.threshold=1e-12)}
+
 
 }
 \value{

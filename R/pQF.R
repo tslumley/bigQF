@@ -1,4 +1,5 @@
 
+
 is.square<-function(M) nrow(M)==ncol(M) && isTRUE(all.equal(M[,1],M[1,]))
 
 pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=500, q=NULL,  convolution.method=c("saddlepoint","integration"), remainder.underflow=c("warn","missing","error")){
@@ -195,12 +196,16 @@ pchisqsum<- function (x, df, a, lower.tail = FALSE, method=c("saddlepoint","inte
         warning("Package 'CompQuadForm' not found, using saddlepoint approximation")
         method <- "saddlepoint"
     }
+
+    threshold<-getOption("bigQF.davies.threshold"))
+    if(is.null(threshold)) threshold <- 1e-9
+    
     abstol <- guess/1000
-    abstol <- pmax(1e-09, abstol)
+    abstol <- pmax(threshold, abstol)
     reltol <- rep(1/1000, length(abstol))
     if (method == "integration") {
             for (i in seq(length = length(x))) {
-                f <- davies(x[i], a, df, acc = 1e-09)
+                f <- davies(x[i], a, df, acc = threshold)
                 if (f$ifault > 0)
                   warning("Probable loss of accuracy ")
                 guess[i] <- f$Qq
