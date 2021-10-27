@@ -1,0 +1,59 @@
+---
+title: "Matrix-free computations"
+author: "Thomas Lumley"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Matrix-free computations}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+When working with a large matrix $M$, we can distinguish between algorithms that require access to arbitrary elements of $M$ and algorithms that only require the ability to multiply by $M$. The latter are called *matrix-free* algorithms; they work with $M$ as a linear operator rather than with its representation as a matrix.
+
+The advantage of matrix-free algorithms is that for specific $M$ there may be much faster ways to compute $Mx$ than by matrix multiplication.  As one extreme example, consider the centering operator $x\mapsto x-\bar x$ on a length-$n$ vector, which can be computed in linear time from its definition but would take time quadratic in $n$ if the operator were represented as multiplication by an $n\times n$ matrix. As another, consider multiplying by a diagonal matrix: the matrix can be represented in linear space and the multiplication performed in linear time by just ignoring all the zero off-diagonal elements.
+
+One important application of `bigQF` is the SKAT test. This involves the eigenvalues of a matrix that is the product of a sparse matrix and a projection matrix. Multiplying by the sparse component is fast for essentially the same reasons that multiplying by a diagonal matrix is fast. Multiplying by the projection component is fast for essentially the same reasons that centering is fast.
+
+Both the stochastic SVD and Lanczos-type algorithms have matrix-free implementations, and the package provides an object-oriented mechanism to use these implementations to compute the distribution of a quadratic form. The `ssvd` function also accepts these objects.
+
+An object of class `matrix-free` is a list with the following components
+
+
+* `mult`	Function to multiply by $M$
+* `tmult`	Function to multiply by $M^T$
+* `trace`	numeric, the trace of $M^TM$ (needed for `pQF` but not `ssvd`)
+* `ncol`	integer, the number of columns of $M$
+* `nrow`	integer, the number of rows of $M$
+
+As a simple example, suppose `M` is a sparse matrix stored using the Matrix package. We can define (see `sparse.matrixfree`)
+
+```
+rval <- list(
+           mult = function(X) M %*% X,
+	   tmult = function(X) crossprod(M,  X),
+	   trace = sum(M^2),
+	   ncol = ncol(M),
+	   nrow = nrow(M)
+	)
+class(rval) <- "matrixfree"
+```
+
+The computations for `trace`, `ncol`, and `nrow` are done at the time the object is constructed.  The `mult` and `tmult` functions will be efficient because they use the sparse-matrix algorithms in the Matrix package.
+
+The `SKAT.matrixfree` objects have a more complicated implementation.  The matrix is of the form $M=\Pi G W/\sqrt{2}$, where $W$ is a diagonal matrix of weights, $G$ is a sparse genotype matrix, and $\Pi$ is the projection matrix on to the residual space of a linear regression model. Since `M` is not sparse, it is not sufficient just to use the sparse-matrix code of the previous example. Instead we specify the multiplication function as
+
+```
+function(X) {
+        base::qr.resid(qr, as.matrix(spG %*% X))/sqrt(2)
+    }
+```
+
+where `spG` is a sparse Matrix object containing $GW$ and `qr` is the QR decomposition of the design matrix from the linear model. The transpose multiplication function is
+
+```
+function(X) {
+        crossprod(spG, qr.resid(qr, X))/sqrt(2)
+    }
+```
+
+Multiplying by the sparse component takes time proportional to the number of non-zero entries of $GW$ and the projection takes time proportional to $np^2$ where $n$ is the number of observations and $p$ is the number of predictors in the linear model. When the genotype matrix is sparse and $p^2\ll n$, the matrix-free algorithm will be fast. 

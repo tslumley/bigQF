@@ -62,7 +62,7 @@ By default, Davies's algorithm is run with a tolerance of \code{1e-9}. This can 
 Vector of upper tail probabilities
 }
 \references{
-Lumley et al. "Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms"
+Lumley et al. (2018) "Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms" Genet Epidemiol. 2018 Sep;42(6):516-527. doi: 10.1002/gepi.22136
 
 Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{http://arxiv.org/abs/0909.4061}.
 

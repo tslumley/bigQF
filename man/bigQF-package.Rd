@@ -22,7 +22,8 @@ This package computes tail probabilities for large quadratic forms, with the mot
 Maintainer: \packageMaintainer{bigQF}
 }
 \references{
-Lumley et al. (forthcoming) Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms
+Lumley et al. (2018) Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms. Genet Epidemiol
+. 2018 Sep;42(6):516-527. doi: 10.1002/gepi.22136
 
 Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions. \url{http://arxiv.org/abs/0909.4061}.
 
