@@ -64,6 +64,12 @@ Vector of upper tail probabilities
 \references{
 Lumley et al. (2018) "Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms" Genet Epidemiol. 2018 Sep;42(6):516-527. doi: 10.1002/gepi.22136
 
+Tong Chen, Thomas Lumley (2019) Numerical evaluation of methods approximating the distribution of a large quadratic form in normal variables. Computational Statistics & Data Analysis.  139: 75-81,
+
+Thomas Lumley (2017) "How to add chi-squareds" \url{https://notstatschat.rbind.io/2017/12/06/how-to-add-chi-squareds/}
+
+Thomas Lumley (2016) "Large quadratic forms" \url{https://notstatschat.rbind.io/2016/09/27/large-quadratic-forms/}
+
 Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{http://arxiv.org/abs/0909.4061}.
 
 Hutchinson, M. F. (1990). A stochastic estimator of the trace of the influence matrix for Laplacian smoothing splines. Communications in Statistics - Simulation and Computation, 19(2):433-450.
