@@ -2,7 +2,8 @@
 
 is.square<-function(M) nrow(M)==ncol(M) && isTRUE(all.equal(M[,1],M[1,]))
 
-pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=500, q=NULL,  convolution.method=c("saddlepoint","integration"), remainder.underflow=c("warn","missing","error")){
+pQF<-function(x, M, method=c("ssvd","lanczos","satterthwaite"), neig=100, tr2.sample.size=500, q=NULL,
+              convolution.method=c("saddlepoint","integration"), remainder.underflow=c("warn","missing","error")){
    method<-match.arg(method)
    conv.method<-match.arg(convolution.method)
    remainder.underflow<-match.arg(remainder.underflow)

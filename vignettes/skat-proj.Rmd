@@ -18,12 +18,12 @@ Note that both
 $$\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)$$ 
 and
 $$I-\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)$$
-are projections. Usually $V=\Sigma$, but that's not necessary. 
+are projections. 
 
 The matrix whose eigenvalues are needed for SKAT is 
 $H=P_0^{1/2}KP_0^{1/2}$ (or $K^{1/2}P_0K^{1/2}$) where
 $$P_0=V^{1/2}\left[I-\left(\Sigma^{-1/2}X(X^T\Sigma^{-1} X)^{-1}X^T\Sigma^{-1/2}\right)\right]V^{1/2}$$
-is the covariance matrix of the the residuals, with $V=\mathop{var}[Y]$. 
+is the covariance matrix of the the residuals, with $V=\mathop{var}[Y]$. Usually $V=\Sigma$, but that's not necessary. 
 
 
 `famSKAT` has test statistic
