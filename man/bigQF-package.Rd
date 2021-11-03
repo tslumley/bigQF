@@ -62,7 +62,7 @@ Tong Chen, Thomas Lumley (2019) Numerical evaluation of methods approximating th
 Lumley et al. (2018) Sequence kernel association tests for large sets of markers: tail probabilities for large quadratic forms. Genet Epidemiol
 . 2018 Sep;42(6):516-527. doi: 10.1002/gepi.22136
 
-Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions. \url{http://arxiv.org/abs/0909.4061}.
+Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions. \url{https://arxiv.org/abs/0909.4061}.
 
 Lee, S., with contributions from Larisa Miropolsky, and Wu, M. (2015). SKAT: SNP-Set (Sequence) Kernel Association Test. R package version 1.1.2.
 

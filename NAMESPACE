@@ -1,4 +1,4 @@
-useDynLib("bigQF")
+useDynLib("bigQF",.registration=TRUE)
 import(Matrix)
 import(methods)
 importFrom(svd, trlan.eigen, trlan.svd, extmat)

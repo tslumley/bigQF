@@ -70,7 +70,7 @@ Thomas Lumley (2017) "How to add chi-squareds" \url{https://notstatschat.rbind.i
 
 Thomas Lumley (2016) "Large quadratic forms" \url{https://notstatschat.rbind.io/2016/09/27/large-quadratic-forms/}
 
-Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{http://arxiv.org/abs/0909.4061}.
+Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{https://arxiv.org/abs/0909.4061}.
 
 Hutchinson, M. F. (1990). A stochastic estimator of the trace of the influence matrix for Laplacian smoothing splines. Communications in Statistics - Simulation and Computation, 19(2):433-450.
 }
@@ -105,7 +105,3 @@ pQF(c(33782471,7e7,1e8), H, n=100)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

@@ -47,7 +47,7 @@ A list with components
 \item{vectors}{matrix whose columns are the corresponding eigenvectors}
 }
 \references{
-Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{http://arxiv.org/abs/0909.4061}.
+Nathan Halko, Per-Gunnar Martinsson, Joel A. Tropp (2010) "Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions" \url{https://arxiv.org/abs/0909.4061}.
 }
 \author{
 Thomas Lumley
@@ -72,7 +72,3 @@ eigen(H, symmetric=TRUE,only.values=TRUE)$values[1:10]
 
   
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

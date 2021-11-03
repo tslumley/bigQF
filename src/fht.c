@@ -59,3 +59,23 @@ SEXP big_mfwht(SEXP data){
   
   return answer;
 }
+
+
+#include <stdlib.h> // for NULL
+#include <R_ext/Rdynload.h>
+
+static const R_CMethodDef CEntries[] = {
+    {"mfwht", (DL_FUNC) &mfwht, 3},
+    {NULL, NULL, 0}
+};
+
+static const R_CallMethodDef CallEntries[] = {
+    {"big_mfwht", (DL_FUNC) &big_mfwht, 1},
+    {NULL, NULL, 0}
+};
+
+void R_init_bigQF(DllInfo *dll)
+{
+    R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

@@ -20,7 +20,7 @@ These data (probably synthetic) come from the SKAT package. The data set is too 
 }
 
 \source{
-\url{http://www.hsph.harvard.edu/skat/}
+\url{https://www.hsph.harvard.edu/skat/}
 }
 
 \examples{
