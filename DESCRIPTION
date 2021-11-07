@@ -1,7 +1,7 @@
 Package: bigQF
 Type: Package
 Title: Quadratic Forms in Large Matrices
-Version: 1.4
+Version: 1.5
 Author: Thomas Lumley
 Maintainer: Thomas Lumley <t.lumley@auckland.ac.nz>
 Description: A computationally-efficient leading-eigenvalue approximation to tail probabilities and quantiles of large quadratic forms, in particular for the Sequence Kernel Association Test (SKAT) used in genomics <doi:10.1002/gepi.22136>. Also provides stochastic singular value decomposition for dense or sparse matrices.

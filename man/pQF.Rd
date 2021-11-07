@@ -89,8 +89,8 @@ skat<-SKAT.matrixfree(sequence)
 skat$trace
 pQF(c(33782471,7e7,1e8),skat, n=100)
 
-\dontrun{
-# these take a few minutes
+\donttest{
+# Don't run these; they take a few minutes
 G<-sequence
 wuweights<-function(maf) dbeta(maf,1,25)
 tmp<-wuweights(colMeans(G)/2)*t(G)

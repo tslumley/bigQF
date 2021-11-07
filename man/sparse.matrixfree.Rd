@@ -42,8 +42,8 @@ data(sequence)
 Msp<-sparse.matrixfree(sequence)
 ssvd(Msp,n=10)
 
-\dontrun{
-## this is slow
+\donttest{
+## this is slow, don't run it
 svd(sequence,nu=0,nv=0)$d[1:10]
 }
 
