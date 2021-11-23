@@ -31,9 +31,14 @@ function(x,Mmult,tMmult,ncolM,traceM, n=100,p=10,q=2, tr2.sample.size=300,
         ## ratio estimator
         tr2.small = trsquared * (tr.small/tr)^2
     }
-    
-    scale <- tr2.small/tr.small
-    nu <- (tr.small^2)/tr2.small
+
+    if (tr.small==0) {
+        scale<-0
+        nu<-1
+        } else {
+            scale <- tr2.small/tr.small
+            nu <- (tr.small^2)/tr2.small
+        }
     pchisqsum(x, c(rep(1, n), nu), c(ee, scale), method = method, 
               lower.tail = FALSE, remainder = remainder)
 }

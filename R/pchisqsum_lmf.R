@@ -11,7 +11,12 @@ function(x,Mmult,tMmult,ncolM,nrowM, traceM, n=100, tr2.sample.size=300, method=
 
 	tr.small<-tr-sum(ee)
 	tr2.small<-tr2-sum(ee^2)
-	scale<-tr2.small/tr.small
-	nu<-(tr.small^2)/tr2.small
-    pchisqsum(x, c(rep(1,n), nu), c(ee, scale), method=method,lower.tail=FALSE,remainder=remainder)
+        if (tr.small==0) {
+            scale<-0
+            nu<-1
+        } else {
+            scale<-tr2.small/tr.small
+            nu<-(tr.small^2)/tr2.small
+        }
+        pchisqsum(x, c(rep(1,n), nu), c(ee, scale), method=method,lower.tail=FALSE,remainder=remainder)
 }
